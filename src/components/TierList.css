@@ -1,0 +1,26 @@
+.tier-list-section {
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.tier-list-section h2 {
+  margin: 0 0 1rem 0;
+  color: #333;
+}
+
+.tier-list-container {
+  min-height: 400px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.placeholder-text {
+  color: #999;
+  font-style: italic;
+  text-align: center;
+  margin-top: 2rem;
+}
