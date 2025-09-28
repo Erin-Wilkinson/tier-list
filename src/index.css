@@ -1,13 +1,34 @@
+/* Root variables for consistent bookish color scheme */
+:root {
+  --parchment-light: #faf7f0;
+  --parchment-cream: #f5f1e8;
+  --warm-beige: #ede5d3;
+  --antique-brown: #8b7355;
+  --dark-brown: #4a3728;
+  --rich-brown: #5d4037;
+  --golden-accent: #b8860b;
+  --muted-gold: #daa520;
+  --paper-shadow: rgba(139, 115, 85, 0.15);
+  --soft-shadow: rgba(74, 55, 40, 0.1);
+  --book-border: #c4a57b;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Crimson Text', 'Georgia', serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, var(--parchment-light) 0%, var(--warm-beige) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--dark-brown);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Courier New', monospace;
+  background: var(--parchment-cream);
+  color: var(--dark-brown);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  border: 1px solid var(--book-border);
 }
