@@ -9,8 +9,8 @@
   --antique-brown: #8b7355;
   --dark-brown: #4a3728;
   --rich-brown: #5d4037;
-  --golden-accent: #e2ba54;
-  --muted-gold: #e2ba54;
+  --golden-accent: #cc8400;
+  --muted-gold: #b8860b;
   --paper-shadow: rgba(139, 115, 85, 0.15);
   --soft-shadow: rgba(74, 55, 40, 0.1);
   --book-border: #c4a57b;
@@ -48,7 +48,7 @@ body {
 }
 
 .App-header {
-  background: linear-gradient(145deg, var(--golden-accent), var(--golden-accent));
+  background: linear-gradient(145deg, var(--book-border), var(--book-border));
   color: var(--parchment-light);
   padding: 2rem;
   border-radius: 12px;
@@ -68,7 +68,7 @@ body {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--book-border), var(--golden-accent), var(--book-border));
+  background: var(--antique-brown);
 }
 
 .App-header h1 {
@@ -110,8 +110,8 @@ body {
   left: 12px;
   width: 24px;
   height: 24px;
-  border-top: 3px solid var(--golden-accent);
-  border-left: 3px solid var(--golden-accent);
+  border-top: 3px solid var(--book-border);
+  border-left: 3px solid var(--book-border);
 }
 
 .tier-list-section::after,
@@ -122,8 +122,8 @@ body {
   right: 12px;
   width: 24px;
   height: 24px;
-  border-bottom: 3px solid var(--golden-accent);
-  border-right: 3px solid var(--golden-accent);
+  border-bottom: 3px solid var(--book-border);
+  border-right: 3px solid var(--book-border);
 }
 
 /* Typography improvements */
@@ -149,7 +149,7 @@ h2::after {
   transform: translateX(-50%);
   width: 60px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--golden-accent), transparent);
+  background: linear-gradient(90deg, transparent, var(--book-border), transparent);
 }
 
 /* Button styling with bookish theme */
