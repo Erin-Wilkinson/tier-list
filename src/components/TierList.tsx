@@ -1,5 +1,6 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import ImageTooltip from './ImageTooltip';
 import './TierList.css';
 import { ImageItem } from './ImageUpload';
 
@@ -13,9 +14,10 @@ export interface Tier {
 interface TierListProps {
   tiers: Tier[];
   onTiersChange: (tiers: Tier[]) => void;
+  onImageClick: (image: ImageItem) => void;
 }
 
-const TierList: React.FC<TierListProps> = ({ tiers, onTiersChange }) => {
+const TierList: React.FC<TierListProps> = ({ tiers, onTiersChange, onImageClick }) => {
   const [editingTier, setEditingTier] = React.useState<string | null>(null);
   const [editValue, setEditValue] = React.useState('');
 
@@ -149,7 +151,15 @@ const TierList: React.FC<TierListProps> = ({ tiers, onTiersChange }) => {
                               ...provided.draggableProps.style,
                             }}
                           >
-                            <img src={image.src} alt={image.name} draggable={false} />
+                            <ImageTooltip description={image.description} imageName={image.name}>
+                              <img 
+                                src={image.src} 
+                                alt={image.name} 
+                                draggable={false}
+                                onClick={() => onImageClick(image)}
+                                style={{ cursor: 'pointer' }}
+                              />
+                            </ImageTooltip>
                           </div>
                         )}
                       </Draggable>

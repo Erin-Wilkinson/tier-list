@@ -1,20 +1,22 @@
 import React from 'react';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
+import ImageTooltip from './ImageTooltip';
 import './ImageUpload.css';
 
 export interface ImageItem {
   id: string;
   src: string;
   name: string;
-  description?: string;
+  description: string;
 }
 
 interface ImageUploadProps {
   images: ImageItem[];
   onImagesChange: (images: ImageItem[]) => void;
+  onImageClick: (image: ImageItem) => void;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ images, onImagesChange }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ images, onImagesChange, onImageClick }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
@@ -94,7 +96,15 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ images, onImagesChange }) => 
                           ...provided.draggableProps.style,
                         }}
                       >
-                        <img src={image.src} alt={image.name} draggable={false} />
+                        <ImageTooltip description={image.description} imageName={image.name}>
+                          <img 
+                            src={image.src} 
+                            alt={image.name} 
+                            draggable={false}
+                            onClick={() => onImageClick(image)}
+                            style={{ cursor: 'pointer' }}
+                          />
+                        </ImageTooltip>
                         <button 
                           className="remove-image-btn"
                           onClick={(e) => {

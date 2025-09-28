@@ -1,0 +1,66 @@
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.image-tooltip {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(-100%);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.tooltip-content {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  max-width: 250px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  word-wrap: break-word;
+}
+
+.tooltip-description {
+  color: white;
+  line-height: 1.4;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.tooltip-arrow {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(0, 0, 0, 0.9);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-100%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-100%) scale(1);
+  }
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .tooltip-content {
+    max-width: 200px;
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .tooltip-description {
+    font-size: 0.8rem;
+  }
+}

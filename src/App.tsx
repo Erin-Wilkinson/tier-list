@@ -3,6 +3,7 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import './App.css';
 import ImageUpload, { ImageItem } from './components/ImageUpload';
 import TierList, { Tier } from './components/TierList';
+import ImageModal from './components/ImageModal';
 
 function App() {
   const [images, setImages] = useState<ImageItem[]>([]);
@@ -15,6 +16,10 @@ function App() {
     { id: 'tier-c', label: 'C', color: '#ffff7f', images: [] },
     { id: 'tier-d', label: 'D', color: '#bfff7f', images: [] },
   ]);
+
+  // Modal state
+  const [modalImage, setModalImage] = useState<ImageItem | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
@@ -32,6 +37,32 @@ function App() {
       return;
     }
 
+    // Handle reordering within the same tier
+    if (source.droppableId === destination.droppableId && source.droppableId !== 'image-pool') {
+      setTiers(prev => prev.map(tier => {
+        if (tier.id === source.droppableId) {
+          const reorderedImages = Array.from(tier.images);
+          const [removed] = reorderedImages.splice(source.index, 1);
+          reorderedImages.splice(destination.index, 0, removed);
+          return { ...tier, images: reorderedImages };
+        }
+        return tier;
+      }));
+      return;
+    }
+
+    // Handle reordering within image pool
+    if (source.droppableId === 'image-pool' && destination.droppableId === 'image-pool') {
+      setImages(prev => {
+        const reorderedImages = Array.from(prev);
+        const [removed] = reorderedImages.splice(source.index, 1);
+        reorderedImages.splice(destination.index, 0, removed);
+        return reorderedImages;
+      });
+      return;
+    }
+
+    // Handle moving between different containers (existing logic)
     // Find the dragged image
     let draggedImage: ImageItem | null = null;
 
@@ -82,6 +113,36 @@ function App() {
     }
   };
 
+  // Modal handlers
+  const handleImageClick = (image: ImageItem) => {
+    setModalImage(image);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setModalImage(null);
+  };
+
+  const handleDescriptionChange = (description: string) => {
+    if (!modalImage) return;
+
+    const updatedImage = { ...modalImage, description };
+    setModalImage(updatedImage);
+
+    // Update the image in the state (either in images array or in tiers)
+    setImages(prev => prev.map(img => 
+      img.id === modalImage.id ? updatedImage : img
+    ));
+
+    setTiers(prev => prev.map(tier => ({
+      ...tier,
+      images: tier.images.map((img: ImageItem) => 
+        img.id === modalImage.id ? updatedImage : img
+      )
+    })));
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="App">
@@ -92,13 +153,26 @@ function App() {
         <main className="App-main">
           <ImageUpload 
             images={images} 
-            onImagesChange={setImages} 
+            onImagesChange={setImages}
+            onImageClick={handleImageClick}
           />
           <TierList 
             tiers={tiers}
             onTiersChange={setTiers}
+            onImageClick={handleImageClick}
           />
         </main>
+        
+        {modalImage && (
+          <ImageModal
+            isOpen={isModalOpen}
+            imageUrl={modalImage.src}
+            imageName={modalImage.name}
+            description={modalImage.description}
+            onClose={handleModalClose}
+            onDescriptionChange={handleDescriptionChange}
+          />
+        )}
       </div>
     </DragDropContext>
   );
