@@ -42,7 +42,7 @@ function App() {
       // Dragging from a tier
       const sourceTier = tiers.find(tier => tier.id === source.droppableId);
       if (sourceTier) {
-        draggedImage = sourceTier.images.find(img => img.id === draggableId) || null;
+        draggedImage = sourceTier.images.find((img: ImageItem) => img.id === draggableId) || null;
       }
     }
 
@@ -54,7 +54,7 @@ function App() {
     } else {
       setTiers(prev => prev.map(tier => 
         tier.id === source.droppableId
-          ? { ...tier, images: tier.images.filter(img => img.id !== draggableId) }
+          ? { ...tier, images: tier.images.filter((img: ImageItem) => img.id !== draggableId) }
           : tier
       ));
     }
