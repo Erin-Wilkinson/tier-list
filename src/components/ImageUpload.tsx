@@ -8,6 +8,13 @@ export interface ImageItem {
   src: string;
   name: string;
   description: string;
+  type?: 'image' | 'text';
+  textContent?: string;
+  textOptions?: {
+    fontSize: number;
+    backgroundColor: string;
+    textColor: string;
+  };
 }
 
 interface ImageUploadProps {

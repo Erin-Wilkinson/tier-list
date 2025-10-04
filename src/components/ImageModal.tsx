@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ImageModal.css';
 
 export interface ImageModalProps {
@@ -8,6 +8,14 @@ export interface ImageModalProps {
   onClose: () => void;
   onDescriptionChange: (description: string) => void;
   description: string;
+  itemType?: 'image' | 'text';
+  textContent?: string;
+  textOptions?: {
+    fontSize: number;
+    backgroundColor: string;
+    textColor: string;
+  };
+  onTextUpdate?: (text: string, options: { fontSize: number; backgroundColor: string; textColor: string }) => void;
 }
 
 const ImageModal: React.FC<ImageModalProps> = ({
@@ -16,8 +24,17 @@ const ImageModal: React.FC<ImageModalProps> = ({
   imageName,
   onClose,
   onDescriptionChange,
-  description
+  description,
+  itemType = 'image',
+  textContent = '',
+  textOptions = { fontSize: 24, backgroundColor: '#ffffff', textColor: '#000000' },
+  onTextUpdate
 }) => {
+  const [editedText, setEditedText] = useState(textContent);
+  const [fontSize, setFontSize] = useState(textOptions.fontSize);
+  const [backgroundColor, setBackgroundColor] = useState(textOptions.backgroundColor);
+  const [textColor, setTextColor] = useState(textOptions.textColor);
+  
   if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -29,6 +46,12 @@ const ImageModal: React.FC<ImageModalProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
       onClose();
+    }
+  };
+
+  const handleUpdateText = () => {
+    if (onTextUpdate && editedText.trim()) {
+      onTextUpdate(editedText.trim(), { fontSize, backgroundColor, textColor });
     }
   };
 
@@ -53,6 +76,64 @@ const ImageModal: React.FC<ImageModalProps> = ({
         </div>
         
         <div className="modal-info">
+          {itemType === 'text' && (
+            <div className="text-edit-section">
+              <h3>Edit Text</h3>
+              <div className="edit-field">
+                <label htmlFor="edit-text">Text:</label>
+                <input
+                  id="edit-text"
+                  type="text"
+                  value={editedText}
+                  onChange={(e) => setEditedText(e.target.value)}
+                  className="text-edit-input"
+                />
+              </div>
+              
+              <div className="edit-options">
+                <div className="edit-option">
+                  <label htmlFor="edit-font-size">Font Size:</label>
+                  <input
+                    id="edit-font-size"
+                    type="range"
+                    min="16"
+                    max="48"
+                    value={fontSize}
+                    onChange={(e) => setFontSize(Number(e.target.value))}
+                    className="slider"
+                  />
+                  <span>{fontSize}px</span>
+                </div>
+                
+                <div className="edit-option">
+                  <label htmlFor="edit-bg-color">Background:</label>
+                  <input
+                    id="edit-bg-color"
+                    type="color"
+                    value={backgroundColor}
+                    onChange={(e) => setBackgroundColor(e.target.value)}
+                    className="color-picker"
+                  />
+                </div>
+                
+                <div className="edit-option">
+                  <label htmlFor="edit-text-color">Text Color:</label>
+                  <input
+                    id="edit-text-color"
+                    type="color"
+                    value={textColor}
+                    onChange={(e) => setTextColor(e.target.value)}
+                    className="color-picker"
+                  />
+                </div>
+              </div>
+              
+              <button onClick={handleUpdateText} className="update-text-btn">
+                Update Text
+              </button>
+            </div>
+          )}
+          
           <div className="description-section">
             <label htmlFor="description">Description:</label>
             <textarea
