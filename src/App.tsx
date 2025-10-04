@@ -4,6 +4,8 @@ import './App.css';
 import ImageUpload, { ImageItem } from './components/ImageUpload';
 import TierList, { Tier } from './components/TierList';
 import ImageModal from './components/ImageModal';
+import TextInput from './components/TextInput';
+import { textToImage } from './utils/textToImage';
 
 function App() {
   const [images, setImages] = useState<ImageItem[]>([]);
@@ -143,6 +145,48 @@ function App() {
     })));
   };
 
+  // Handler for adding text items
+  const handleTextItemAdd = (textItem: ImageItem) => {
+    setImages(prev => [...prev, textItem]);
+  };
+
+  // Handler for updating text items
+  const handleTextUpdate = (text: string, options: { fontSize: number; backgroundColor: string; textColor: string }) => {
+    if (!modalImage || modalImage.type !== 'text') return;
+
+    // Generate new image from updated text
+    const newImageDataUrl = textToImage({
+      text,
+      fontSize: options.fontSize,
+      backgroundColor: options.backgroundColor,
+      textColor: options.textColor,
+      width: 150,
+      height: 150,
+    });
+
+    const updatedImage: ImageItem = {
+      ...modalImage,
+      src: newImageDataUrl,
+      name: text.substring(0, 30) + (text.length > 30 ? '...' : ''),
+      textContent: text,
+      textOptions: options,
+    };
+
+    setModalImage(updatedImage);
+
+    // Update the image in the state (either in images array or in tiers)
+    setImages(prev => prev.map(img => 
+      img.id === modalImage.id ? updatedImage : img
+    ));
+
+    setTiers(prev => prev.map(tier => ({
+      ...tier,
+      images: tier.images.map((img: ImageItem) => 
+        img.id === modalImage.id ? updatedImage : img
+      )
+    })));
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="App">
@@ -151,6 +195,7 @@ function App() {
         </header>
         
         <main className="App-main">
+          <TextInput onTextItemAdd={handleTextItemAdd} />
           <ImageUpload 
             images={images} 
             onImagesChange={setImages}
@@ -171,6 +216,10 @@ function App() {
             description={modalImage.description}
             onClose={handleModalClose}
             onDescriptionChange={handleDescriptionChange}
+            itemType={modalImage.type}
+            textContent={modalImage.textContent}
+            textOptions={modalImage.textOptions}
+            onTextUpdate={handleTextUpdate}
           />
         )}
       </div>
